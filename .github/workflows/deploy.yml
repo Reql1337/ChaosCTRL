@@ -1,10 +1,13 @@
-name: Build and Verify
+name: Build and Deploy
 
 on:
   push:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -25,6 +28,9 @@ jobs:
     - name: Run build
       run: npm run build
 
-    - name: Check for build errors
-      if: failure()
-      run: echo "Build failed! Please check the logs above."
+    - name: Deploy to GitHub Pages
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: dist
+        branch: gh-pages
