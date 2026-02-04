@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChaosCtrl | Control the Unexpected</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: {
+                900: '#020408', // Deep Black 
+                800: '#062C21', // Dark Emerald Black
+              },
+              emerald: {
+                400: '#34D399',
+                500: '#10B981',
+                600: '#059669',
+                900: '#064E3B',
+              },
+              chaos: {
+                // Mapping legacy chaos names to new theme for backward compatibility if missed, 
+                // but we will update components to use 'emerald'.
+                purple: '#10B981', // Now Green
+                violet: '#34D399', // Lighter Green
+                orange: '#F97316', // Warning Orange (Keep for alerts)
+                green: '#10B981', // Green
+              },
+              brand: { 
+                black: '#020408',
+                gray: '#062C21',
+                yellow: '#10B981', // Mapping yellow to emerald
+                text: '#F3F4F6',
+                muted: '#9CA3AF',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #020408;
+        color: #F3F4F6;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #020408; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #064E3B; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #059669; 
+      }
+      
+      .glass-card {
+        background: rgba(6, 44, 33, 0.4);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      }
+      
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      
+      /* Custom scrollbar refinement */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(16, 185, 129, 0.2);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(16, 185, 129, 0.4);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
+    "recharts": "https://esm.sh/recharts@^3.5.1",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.2.7"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
