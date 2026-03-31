@@ -21,7 +21,7 @@ import Gem from 'lucide-react/dist/esm/icons/gem';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
-import XCircle from 'lucide-react/dist/esm/icons/xcircle';
+import XCircle from 'lucide-react/dist/esm/icons/x-circle';
 import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 import Filter from 'lucide-react/dist/esm/icons/filter';
@@ -78,7 +78,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const [isDarkMode, setIsDarkMode] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSimulationModalOpen, setIsSimulationModalOpen] = useState(false);
     const [isSlackModalOpen, setIsSlackModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('dashboard');
     const [selectedStakeholder, setSelectedStakeholder] = useState<any>(null);
@@ -438,66 +438,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             </m.div>
         </div>
     );
-
-    const renderModal = () => (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-            <m.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                className={`${theme.cardBg} w-full max-w-lg rounded-3xl border ${theme.border} p-8 shadow-2xl overflow-hidden relative`}
-            >
-                <div className="flex justify-between items-center mb-8">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-500/20 rounded-xl">
-                            <Zap className="text-blue-500" size={24} />
-                        </div>
-                        <h3 className={`text-2xl font-bold ${theme.text}`}>Delay Simulator</h3>
-                    </div>
-                    <button onClick={() => setIsModalOpen(false)} className={`${theme.textMuted} hover:text-white`}>
-                        <X size={24} />
-                    </button>
-                </div>
-
-                <div className="space-y-6 mb-10">
-                    <p className={`${theme.textMuted} text-sm`}>
-                        Simulate how this new request interacts with your existing backlog. Calculations are based on team velocity, dependency depth, and developer availability.
-                    </p>
-
-                    <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
-                        <div className="flex justify-between items-center">
-                            <span className={`text-sm ${theme.textMuted}`}>Current Release</span>
-                            <span className={`text-sm font-bold ${theme.text}`}>Sep 14, 2024</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className={`text-sm text-red-400 font-bold`}>New Projected Date</span>
-                            <span className={`text-sm font-bold text-red-500 animate-pulse`}>Sep 26, 2024</span>
-                        </div>
-                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                            <div className="h-full bg-red-500 w-[65%] shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
-                        </div>
-                        <div className="flex justify-center pt-2">
-                            <span className="text-xs font-black text-red-500 uppercase tracking-widest">+12 DAYS AT RISK</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex gap-4">
-                    <button
-                        onClick={() => setIsModalOpen(false)}
-                        className={`flex-1 py-4 rounded-xl font-bold text-sm ${theme.text} hover:bg-white/5 border ${theme.border} transition-all`}
-                    >
-                        Close Simulator
-                    </button>
-                    <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="flex-1 bg-red-500 hover:bg-red-400 text-white py-4 rounded-xl font-bold text-sm transition-all shadow-lg"
-                    >
-                        Reject Change
-                    </button>
-                </div>
-            </m.div>
-        </div>
-    );
+;
 
     const renderStakeholderModal = () => {
         if (!selectedStakeholder) return null;
@@ -702,7 +643,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                     stats={displayedStats}
                     currentChaosScore={currentChaosScore}
                     predictedDelay={predictedDelay}
-                    onSimulate={() => setIsModalOpen(true)}
+                    onSimulate={() => setIsSimulationModalOpen(true)}
                     theme={theme}
                 />
 
@@ -783,7 +724,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                             <X size={12} /> Reject Jira
                                         </button>
                                         <button
-                                            onClick={() => setIsModalOpen(true)}
+                                            onClick={() => setIsSimulationModalOpen(true)}
                                             className="flex-1 bg-white/5 hover:bg-blue-500 hover:text-white text-blue-500 text-[10px] font-bold py-1.5 rounded transition-all flex items-center justify-center gap-1"
                                         >
                                             <Zap size={12} /> Simulate
@@ -1326,8 +1267,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     return (
         <div className={`min-h-screen ${theme.bg} flex font-sans transition-colors duration-300`}>
             <AnalysisModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isSimulationModalOpen}
+                onClose={() => setIsSimulationModalOpen(false)}
                 onAccept={handleAddChange}
             />
 
@@ -1485,7 +1426,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {renderContent()}
 
-                {isModalOpen && renderModal()}
                 {isSlackModalOpen && renderSlackModal()}
                 {isRoadmapModalOpen && renderAddRoadmapModal()}
             </main>
