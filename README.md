@@ -3,8 +3,8 @@
   <br />
   <br />
   
-  <a href="https://ai.studio/apps/drive/1N9ZQ34KahwbZiYh06U5DxSybJ_39DEe1">
-    <img src="https://img.shields.io/badge/LIVE_DEMO-00E676?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Live Demo" />
+  <a href="https://Reql1337.github.io/ChaosCTRL/">
+    <img src="https://img.shields.io/badge/LIVE_DEMO-00E676?style=for-the-badge&logo=github&logoColor=white" alt="Live Demo" />
   </a>
 
   <br />
@@ -17,7 +17,6 @@
     <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
     <img src="https://img.shields.io/badge/Supabase-2.9-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-    <img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini" />
   </p>
 </div>
 
@@ -34,8 +33,8 @@
 ### 🔍 Real-time Scope Monitoring
 Instant integration with your workflow. Every new ticket or 'quick ask' is automatically analyzed for potential scope creep.
 
-### 🧪 The Chaos Score
-Quantitative risk assessment for every task, powered by Gemini AI.
+### 🧪 Complexity Scoring (Chaos Score)
+Quantitative risk assessment for every task. Every ticket gets a score based on dependency depth and historical sprint data to flag high-risk "minor tweaks" before they derail your release.
 
 ### ⏳ Delay Simulator
 Visualize the ripple effect of new requests. ChaosCTRL simulates the impact of adding tasks mid-sprint, showing you exactly how many days your final deadline will shift.
@@ -49,15 +48,24 @@ Beautiful, interactive dashboards using **Recharts** and **Framer Motion** to vi
 
 - **Frontend**: React 19, Vite, TypeScript, Tailwind CSS
 - **Frameworks**: Framer Motion, Recharts, Lucide Icons
-- **Backend/AI**: Supabase, Google Gemini GenAI
+- **Backend/AI Core**: Supabase, Advanced Large Language Models (LLM) for complexity analysis
 
 ---
 
 ## 🚦 Getting Started
 
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Supabase Account](https://supabase.com/)
+- [AI API Key](https://ai.google.dev/) (For Complexity Scoring)
+
+### Installation
+
 1. **Clone & Install**
    ```bash
    git clone https://github.com/Reql1337/ChaosCTRL.git
+   cd ChaosCTRL
    npm install
    ```
 
@@ -71,6 +79,15 @@ Beautiful, interactive dashboards using **Recharts** and **Framer Motion** to vi
    ```bash
    npm run dev
    ```
+
+---
+
+## 🚀 Deployment
+
+This project is automatically deployed to **GitHub Pages** via a GitHub Action on every push to the `main` branch. 
+
+> [!NOTE]
+> Make sure to add `VITE_GEMINI_API_KEY`, `VITE_SUPABASE_URL`, and `VITE_SUPABASE_ANON_KEY` to your **GitHub Repository Secrets** for the live demo to function correctly.
 
 ---
 
