@@ -1,0 +1,1 @@
+import{j as r}from"./index-CW8EcfPR.js";import i from"./Pricing-CdsOjX1G.js";import s from"./FAQ-Co4lawhO.js";import"./check-CNM0CdSl.js";import"./plus-nF677z59.js";const p=()=>r.jsxs("div",{className:"min-h-screen bg-navy-900 pt-12",children:[r.jsx(i,{}),r.jsx(s,{})]});export{p as default};
