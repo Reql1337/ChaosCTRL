@@ -29,7 +29,7 @@ if (!checkSupabaseConfig()) {
         </p>
         <div className="bg-navy-900 rounded-xl p-4 text-left border border-white/5 space-y-2 mb-6">
           <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">Solution:</p>
-          <p className="text-sm text-gray-300">Add the required labels to your <b>GitHub Repository Secrets</b> under Settings > Secrets > Actions.</p>
+          <p className="text-sm text-gray-300">Add the required labels to your <b>GitHub Repository Secrets</b> under Settings &gt; Secrets &gt; Actions.</p>
         </div>
         <button 
           onClick={() => window.location.reload()}
