@@ -12,7 +12,11 @@ import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
+import PrivacyPage from './pages/Privacy';
+import TermsPage from './pages/Terms';
+import LoadingScreen from './components/Common/LoadingScreen';
 import Footer from './components/Layout/Footer';
+import { supabase } from './lib/supabase';
 
 type ViewState =
   | 'landing'
@@ -35,6 +39,22 @@ const App: React.FC = () => {
   const location = useLocation();
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [savedScrollY, setSavedScrollY] = useState(0);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     // Only reset scroll on full page navigation, not on every re-render
@@ -96,6 +116,8 @@ const App: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/features" element={<FeaturesPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Routes>
 
       {!isAuthPage && (

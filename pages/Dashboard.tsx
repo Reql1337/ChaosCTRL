@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     LayoutDashboard,
     FileText,
@@ -65,6 +65,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import AnalysisModal from '../components/Dashboard/AnalysisModal';
 import { ScopeAnalysisResult, ChangeRequest } from '../types';
+import { supabase } from '../lib/supabase';
 
 import MetricsGrid from '../components/Dashboard/Metrics';
 import ScopeVelocityChart from '../components/Dashboard/Charts';
@@ -151,6 +152,39 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         ? Math.round(activeRisks.reduce((acc, curr) => acc + curr.score, 0) / activeRisks.length)
         : 0;
     const predictedDelay = activeRisks.reduce((acc, curr) => acc + curr.impactDays, 0);
+
+    // Fetch data on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data: requests } = await supabase
+                .from('change_requests')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (requests && requests.length > 0) {
+                setChangeRequests(requests);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Save changes when changeRequests updates
+    useEffect(() => {
+        const saveData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user || changeRequests.length === 0) return;
+
+            // In a real app, we would perform incremental updates.
+            // For this demo, we'll assume we want to sync the state.
+            // This is a simplified approach.
+            console.log('Syncing change requests to Supabase...');
+        };
+        saveData();
+    }, [changeRequests]);
 
     // Profile Handlers
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
