@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { X, ArrowRight, Loader2, AlertTriangle, Gem } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Gem from 'lucide-react/dist/esm/icons/gem';
 import { analyzeScopeChange } from '../../services/geminiService';
 import { ScopeAnalysisResult } from '../../types';
 

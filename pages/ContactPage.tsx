@@ -1,5 +1,7 @@
 import React from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import Phone from 'lucide-react/dist/esm/icons/phone';
 
 const ContactPage: React.FC = () => {
   return (

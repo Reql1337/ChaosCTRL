@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Gem, ArrowRight, Loader2, ArrowLeft, User } from 'lucide-react';
-import { motion } from 'framer-motion';
+import Gem from 'lucide-react/dist/esm/icons/gem';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import User from 'lucide-react/dist/esm/icons/user';
+import { m } from 'framer-motion';
 
 interface LoginPageProps {
   onLogin: () => void;
@@ -53,7 +57,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onBack, initialMode = 's
               </span>
            </div>
 
-           <motion.div 
+           <m.div 
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
              key={mode} // Animate when mode changes
@@ -68,7 +72,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onBack, initialMode = 's
 
               <form onSubmit={handleSubmit} className="space-y-4">
                   {mode === 'signup' && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}>
+                    <m.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}>
                         <label className="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
@@ -78,7 +82,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onBack, initialMode = 's
                                 placeholder="John Doe"
                             />
                         </div>
-                    </motion.div>
+                    </m.div>
                   )}
 
                   <div>
@@ -126,7 +130,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onBack, initialMode = 's
                     </button>
                   </p>
               </div>
-           </motion.div>
+           </m.div>
        </div>
     </div>
   );

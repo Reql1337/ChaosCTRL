@@ -59,4 +59,4 @@ const ScopeVelocityChart: React.FC<ScopeVelocityChartProps> = ({ data, isDarkMod
     );
 };
 
-export default ScopeVelocityChart;
+export default React.memo(ScopeVelocityChart);

@@ -1,5 +1,7 @@
 import React from 'react';
-import { ArrowRight, Calendar, User } from 'lucide-react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import User from 'lucide-react/dist/esm/icons/user';
 
 const posts = [
   {

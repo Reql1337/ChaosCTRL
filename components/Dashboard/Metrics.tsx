@@ -1,5 +1,10 @@
 import React from 'react';
-import { Briefcase, Activity, CreditCard, Plus, TrendingUp, TrendingDown } from 'lucide-react';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
 
 interface MetricCardProps {
     title: string;
@@ -78,4 +83,4 @@ const MetricsGrid: React.FC<MetricsGridProps> = ({ stats, currentChaosScore, pre
     );
 };
 
-export default MetricsGrid;
+export default React.memo(MetricsGrid);

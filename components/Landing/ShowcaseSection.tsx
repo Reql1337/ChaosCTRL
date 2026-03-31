@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { m } from 'framer-motion';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 interface ShowcaseSectionProps {
   title: string;
@@ -19,14 +19,14 @@ const ShowcaseSection: React.FC<ShowcaseSectionProps> = ({ title, subtitle, desc
         <div className={`flex flex-col lg:flex-row items-center gap-16 ${align === 'right' ? 'lg:flex-row-reverse' : ''}`}>
           
           <div className="flex-1 space-y-6">
-            <motion.h2 
+            <m.h2 
               initial={{ opacity: 0, x: align === 'left' ? -20 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               className={`font-display font-black text-5xl md:text-6xl uppercase leading-none ${color}`}
             >
               {title}
-            </motion.h2>
+            </m.h2>
             <h3 className="text-2xl text-white font-bold">{subtitle}</h3>
             <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
               {description}
@@ -37,14 +37,14 @@ const ShowcaseSection: React.FC<ShowcaseSectionProps> = ({ title, subtitle, desc
           </div>
 
           <div className="flex-1 w-full">
-            <motion.div 
+            <m.div 
                initial={{ opacity: 0, scale: 0.95 }}
                whileInView={{ opacity: 1, scale: 1 }}
                transition={{ duration: 0.8 }}
                className="relative"
             >
                 {imageComponent}
-            </motion.div>
+            </m.div>
           </div>
 
         </div>

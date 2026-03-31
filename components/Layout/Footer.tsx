@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gem } from 'lucide-react';
+import Gem from 'lucide-react/dist/esm/icons/gem';
 
 interface FooterProps {
   onNavigate: (page: string) => void;
@@ -53,7 +53,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center border-t border-white/5 pt-8">
-            <p className="text-gray-500 text-xs">© 2025 ChaosCTRL. All rights reserved.</p>
+            <p className="text-gray-500 text-xs mb-4 md:mb-0">© 2025 ChaosCTRL. All rights reserved.</p>
+            <div className="flex gap-6 text-xs text-gray-400">
+                <span onClick={() => onNavigate('privacy')} className={linkClass}>Privacy Policy</span>
+                <span onClick={() => onNavigate('terms')} className={linkClass}>Terms of Service</span>
+            </div>
         </div>
       </div>
     </footer>

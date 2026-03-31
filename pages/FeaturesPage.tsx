@@ -1,5 +1,10 @@
 import React from 'react';
-import { Shield, Zap, Search, Activity, GitBranch, Bell } from 'lucide-react';
+import Shield from 'lucide-react/dist/esm/icons/shield';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch';
+import Bell from 'lucide-react/dist/esm/icons/bell';
 
 const FeaturesPage: React.FC = () => {
   return (

@@ -1,5 +1,8 @@
 import React from 'react';
-import { Gem, Activity, GitPullRequest, ShieldAlert } from 'lucide-react';
+import Gem from 'lucide-react/dist/esm/icons/gem';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import GitPullRequest from 'lucide-react/dist/esm/icons/git-pull-request';
+import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert';
 
 interface FeaturesGridProps {
   onStart?: () => void;

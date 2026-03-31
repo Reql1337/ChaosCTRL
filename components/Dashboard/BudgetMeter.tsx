@@ -1,6 +1,6 @@
 import React from 'react';
 import Gauge from '../UI/ChaosGauge';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const BudgetMeter: React.FC<{ score: number }> = ({ score }) => {
   return (

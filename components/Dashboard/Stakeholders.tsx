@@ -49,4 +49,4 @@ const StakeholdersGrid: React.FC<StakeholdersGridProps> = ({ data, theme, onSele
     );
 };
 
-export default StakeholdersGrid;
+export default React.memo(StakeholdersGrid);

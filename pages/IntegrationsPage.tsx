@@ -1,6 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import { m } from 'framer-motion';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 const integrations = [
   { name: 'Jira Software', category: 'Issue Tracking', desc: 'Sync tickets, sprints, and story points automatically.', icon: '🔷' },
@@ -24,7 +25,7 @@ const IntegrationsPage: React.FC = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
            {integrations.map((tool, i) => (
-              <motion.div 
+              <m.div 
                  key={i}
                  initial={{ opacity: 0, y: 20 }}
                  animate={{ opacity: 1, y: 0 }}
@@ -42,7 +43,7 @@ const IntegrationsPage: React.FC = () => {
                  <button className="flex items-center gap-2 text-emerald-500 text-sm font-bold group-hover:gap-3 transition-all">
                     Connect <ArrowRight size={16} />
                  </button>
-              </motion.div>
+              </m.div>
            ))}
         </div>
 

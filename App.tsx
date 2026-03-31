@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import Navbar from './components/Layout/Navbar';
-import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
-import LoginPage from './pages/LoginPage';
-import IntegrationsPage from './pages/IntegrationsPage';
-import DocumentationPage from './pages/DocumentationPage';
-import APIPage from './pages/APIPage';
-import CommunityPage from './pages/CommunityPage';
-import AboutPage from './pages/AboutPage';
-import BlogPage from './pages/BlogPage';
-import ContactPage from './pages/ContactPage';
-import FeaturesPage from './pages/FeaturesPage';
-import PricingPage from './pages/PricingPage';
-import PrivacyPage from './pages/Privacy';
-import TermsPage from './pages/Terms';
 import LoadingScreen from './components/Common/LoadingScreen';
 import Footer from './components/Layout/Footer';
 import { supabase } from './lib/supabase';
+
+// Lazy load pages for performance
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const IntegrationsPage = lazy(() => import('./pages/IntegrationsPage'));
+const DocumentationPage = lazy(() => import('./pages/DocumentationPage'));
+const APIPage = lazy(() => import('./pages/APIPage'));
+const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const FeaturesPage = lazy(() => import('./pages/FeaturesPage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+const PrivacyPage = lazy(() => import('./pages/Privacy'));
+const TermsPage = lazy(() => import('./pages/Terms'));
 
 type ViewState =
   | 'landing'
@@ -103,22 +105,24 @@ const App: React.FC = () => {
         <Navbar onSignIn={() => handleNavigate('login')} isLoggedIn={false} onNavigate={handleNavigate} />
       )}
 
-      <Routes>
-        <Route path="/" element={<LandingPage onStart={() => handleNavigate('signup')} />} />
-        <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
-        <Route path="/login" element={<LoginPage initialMode={authMode} onLogin={handleSignIn} onBack={handleBackToLanding} />} />
-        <Route path="/integrations" element={<IntegrationsPage />} />
-        <Route path="/docs" element={<DocumentationPage />} />
-        <Route path="/api" element={<APIPage />} />
-        <Route path="/community" element={<CommunityPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/features" element={<FeaturesPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-      </Routes>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<LandingPage onStart={() => handleNavigate('signup')} />} />
+          <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
+          <Route path="/login" element={<LoginPage initialMode={authMode} onLogin={handleSignIn} onBack={handleBackToLanding} />} />
+          <Route path="/integrations" element={<IntegrationsPage />} />
+          <Route path="/docs" element={<DocumentationPage />} />
+          <Route path="/api" element={<APIPage />} />
+          <Route path="/community" element={<CommunityPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+        </Routes>
+      </Suspense>
 
       {!isAuthPage && (
         <Footer onNavigate={(page) => handleNavigate(page)} />

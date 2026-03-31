@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Minus } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Minus from 'lucide-react/dist/esm/icons/minus';
+import { m, AnimatePresence } from 'framer-motion';
 
 const faqs = [
   {
@@ -51,7 +52,7 @@ const FAQ: React.FC = () => {
                    </button>
                    <AnimatePresence>
                      {openIndex === i && (
-                       <motion.div
+                       <m.div
                          initial={{ height: 0, opacity: 0 }}
                          animate={{ height: 'auto', opacity: 1 }}
                          exit={{ height: 0, opacity: 0 }}
@@ -61,7 +62,7 @@ const FAQ: React.FC = () => {
                          <p className="text-gray-400 pt-2 pb-4 leading-relaxed">
                            {item.answer}
                          </p>
-                       </motion.div>
+                       </m.div>
                      )}
                    </AnimatePresence>
                 </div>

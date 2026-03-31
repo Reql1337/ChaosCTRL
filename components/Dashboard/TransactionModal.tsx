@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { X, ArrowRight, Loader2, ShieldAlert, CheckCircle } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import ShieldAlert from 'lucide-react/dist/esm/icons/shield-alert';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
 import { analyzeTransaction } from '../../services/geminiService';
 import { AnalysisResult, Transaction } from '../../types';
 

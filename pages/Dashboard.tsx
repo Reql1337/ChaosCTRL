@@ -1,50 +1,49 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-    LayoutDashboard,
-    FileText,
-    Activity,
-    Users,
-    Settings,
-    Moon,
-    Sun,
-    Plus,
-    Search,
-    Bell,
-    LogOut,
-    TrendingUp,
-    TrendingDown,
-    MoreHorizontal,
-    Briefcase,
-    Layers,
-    Map,
-    CreditCard,
-    Gem,
-    ChevronDown,
-    Calendar,
-    CheckCircle,
-    XCircle,
-    AlertTriangle,
-    Clock,
-    Filter,
-    Download,
-    User,
-    X,
-    ArrowUp,
-    ArrowDown,
-    RotateCcw,
-    Trash2,
-    Archive as ArchiveIcon,
-    Flag,
-    Upload,
-    Save,
-    Mail,
-    MessageSquare,
-    Trello,
-    FileCode,
-    Check,
-    Eye,
-    EyeOff
-} from 'lucide-react';
+import LayoutDashboard from 'lucide-react/dist/esm/icons/layout-dashboard';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
+import Activity from 'lucide-react/dist/esm/icons/activity';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Settings from 'lucide-react/dist/esm/icons/settings';
+import Moon from 'lucide-react/dist/esm/icons/moon';
+import Sun from 'lucide-react/dist/esm/icons/sun';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Bell from 'lucide-react/dist/esm/icons/bell';
+import LogOut from 'lucide-react/dist/esm/icons/log-out';
+import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
+import TrendingDown from 'lucide-react/dist/esm/icons/trending-down';
+import MoreHorizontal from 'lucide-react/dist/esm/icons/more-horizontal';
+import Briefcase from 'lucide-react/dist/esm/icons/briefcase';
+import Layers from 'lucide-react/dist/esm/icons/layers';
+import Map from 'lucide-react/dist/esm/icons/map';
+import CreditCard from 'lucide-react/dist/esm/icons/credit-card';
+import Gem from 'lucide-react/dist/esm/icons/gem';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import CheckCircle from 'lucide-react/dist/esm/icons/check-circle';
+import XCircle from 'lucide-react/dist/esm/icons/xcircle';
+import AlertTriangle from 'lucide-react/dist/esm/icons/alert-triangle';
+import Clock from 'lucide-react/dist/esm/icons/clock';
+import Filter from 'lucide-react/dist/esm/icons/filter';
+import Download from 'lucide-react/dist/esm/icons/download';
+import User from 'lucide-react/dist/esm/icons/user';
+import X from 'lucide-react/dist/esm/icons/x';
+import ArrowUp from 'lucide-react/dist/esm/icons/arrow-up';
+import ArrowDown from 'lucide-react/dist/esm/icons/arrow-down';
+import RotateCcw from 'lucide-react/dist/esm/icons/rotate-ccw';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
+import ArchiveIcon from 'lucide-react/dist/esm/icons/archive';
+import Flag from 'lucide-react/dist/esm/icons/flag';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import Save from 'lucide-react/dist/esm/icons/save';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square';
+import Trello from 'lucide-react/dist/esm/icons/trello';
+import FileCode from 'lucide-react/dist/esm/icons/file-code';
+import Check from 'lucide-react/dist/esm/icons/check';
+import Zap from 'lucide-react/dist/esm/icons/zap';
+import Eye from 'lucide-react/dist/esm/icons/eye';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
 import {
     ResponsiveContainer,
     BarChart,
@@ -62,7 +61,7 @@ import {
     LineChart,
     Line
 } from 'recharts';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import AnalysisModal from '../components/Dashboard/AnalysisModal';
 import { ScopeAnalysisResult, ChangeRequest } from '../types';
 import { supabase } from '../lib/supabase';
@@ -80,6 +79,7 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSlackModalOpen, setIsSlackModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('dashboard');
     const [selectedStakeholder, setSelectedStakeholder] = useState<any>(null);
 
@@ -142,16 +142,34 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     ]);
 
     const [stats, setStats] = useState({
-        totalTickets: 567899,
-        risksResolved: 1789
+        totalTickets: 0,
+        risksResolved: 0
     });
 
+    const [isDemoMode, setIsDemoMode] = useState(false);
+
     // --- DERIVED STATE (Moved here so all tabs can access live metrics) ---
-    const activeRisks = changeRequests.filter(req => !req.archived && req.status !== 'rejected');
-    const currentChaosScore = activeRisks.length > 0
+    const displayedRequests: ChangeRequest[] = React.useMemo(() => isDemoMode
+        ? [
+            { id: 'demo1', description: 'Payment Gateway Refactor', score: 89, impactDays: 5, source: 'Jira', timestamp: '2h ago', status: 'pending', archived: false, reasoning: 'High complexity DB migration' },
+            { id: 'demo2', description: 'User Dashboard V2', score: 65, impactDays: 4, source: 'Slack', timestamp: '4h ago', status: 'pending', archived: false, reasoning: 'Multiple UI dependencies' },
+            { id: 'demo3', description: 'Analytics Integration', score: 25, impactDays: 2, source: 'Email', timestamp: '1d ago', status: 'approved', archived: false, reasoning: 'Standard tracking addition' },
+            { id: 'demo4', description: 'Mobile Responsiveness', score: 45, impactDays: 3, source: 'Jira', timestamp: '2d ago', status: 'pending', archived: false, reasoning: 'Affects multiple standard views' },
+            { id: 'demo5', description: 'Email Notification System', score: 72, impactDays: 3, source: 'Slack', timestamp: '3d ago', status: 'pending', archived: false, reasoning: 'Third-party API integration risk' },
+        ]
+        : changeRequests, [isDemoMode, changeRequests]);
+
+    const displayedStats = React.useMemo(() => isDemoMode
+        ? { totalTickets: 567899, risksResolved: 1789 }
+        : stats, [isDemoMode, stats]);
+
+    const activeRisks = React.useMemo(() => displayedRequests.filter(req => !req.archived && req.status !== 'rejected'), [displayedRequests]);
+
+    const currentChaosScore = React.useMemo(() => activeRisks.length > 0
         ? Math.round(activeRisks.reduce((acc, curr) => acc + curr.score, 0) / activeRisks.length)
-        : 0;
-    const predictedDelay = activeRisks.reduce((acc, curr) => acc + curr.impactDays, 0);
+        : 0, [activeRisks]);
+
+    const predictedDelay = React.useMemo(() => activeRisks.reduce((acc, curr) => acc + curr.impactDays, 0), [activeRisks]);
 
     // Fetch data on mount
     useEffect(() => {
@@ -167,6 +185,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
             if (requests && requests.length > 0) {
                 setChangeRequests(requests);
+            } else {
+                // If user has no data, default to Demo Mode so they don't see an empty page immediately
+                setIsDemoMode(true);
             }
         };
         fetchData();
@@ -249,27 +270,48 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         setNewRoadmapOwner('Product');
     };
 
-    const handleStatusUpdate = (id: string, newStatus: 'pending' | 'approved' | 'rejected') => {
-        setChangeRequests(prev => prev.map(req =>
-            req.id === id ? { ...req, status: newStatus } : req
-        ));
-    };
+    const handleArchive = React.useCallback(async (id: string) => {
+        // ... same logic ...
+        const updated = (changeRequests.length > 0 ? changeRequests : displayedRequests).map(r =>
+            r.id === id ? { ...r, archived: true } : r
+        );
+        if (changeRequests.length > 0) {
+            setChangeRequests(updated);
+            const { error } = await supabase.from('change_requests').update({ archived: true }).eq('id', id);
+            if (error) console.error(error);
+        } else {
+            // Local update for demo
+            setChangeRequests(updated);
+        }
+    }, [changeRequests, displayedRequests]);
 
-    const handleArchive = (id: string) => {
-        setChangeRequests(prev => prev.map(req =>
-            req.id === id ? { ...req, archived: true } : req
-        ));
-    };
+    const handleRestore = React.useCallback(async (id: string) => {
+        const updated = (changeRequests.length > 0 ? changeRequests : displayedRequests).map(r =>
+            r.id === id ? { ...r, archived: false } : r
+        );
+        setChangeRequests(updated);
+        if (changeRequests.length > 0) {
+            await supabase.from('change_requests').update({ archived: false }).eq('id', id);
+        }
+    }, [changeRequests, displayedRequests]);
 
-    const handleRestore = (id: string) => {
-        setChangeRequests(prev => prev.map(req =>
-            req.id === id ? { ...req, archived: false } : req
-        ));
-    };
+    const handleDelete = React.useCallback(async (id: string) => {
+        const updated = (changeRequests.length > 0 ? changeRequests : displayedRequests).filter(r => r.id !== id);
+        setChangeRequests(updated);
+        if (changeRequests.length > 0) {
+            await supabase.from('change_requests').delete().eq('id', id);
+        }
+    }, [changeRequests, displayedRequests]);
 
-    const handleDelete = (id: string) => {
-        setChangeRequests(prev => prev.filter(req => req.id !== id));
-    };
+    const handleStatusUpdate = React.useCallback(async (id: string, status: 'approved' | 'rejected') => {
+        const updated = (changeRequests.length > 0 ? changeRequests : displayedRequests).map(r =>
+            r.id === id ? { ...r, status } : r
+        );
+        setChangeRequests(updated);
+        if (changeRequests.length > 0) {
+            await supabase.from('change_requests').update({ status }).eq('id', id);
+        }
+    }, [changeRequests, displayedRequests]);
 
     const sortRisks = (direction: 'asc' | 'desc') => {
         setRiskSortDirection(direction);
@@ -328,13 +370,142 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         navInactive: isDarkMode ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-900',
     };
 
+    const renderSlackModal = () => (
+        <div className="fixed inset-0 bg-navy-950/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+            <m.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="bg-[#1A1D21] w-full max-w-2xl rounded-xl shadow-2xl border border-white/10 overflow-hidden"
+            >
+                {/* Slack Header */}
+                <div className="bg-[#121519] px-4 py-3 border-b border-white/5 flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-emerald-500 rounded flex items-center justify-center text-[10px] font-bold text-navy-900">#</div>
+                        <span className="text-white font-bold text-sm">#product-alerts</span>
+                    </div>
+                    <button onClick={() => setIsSlackModalOpen(false)} className="text-gray-500 hover:text-white transition-colors">
+                        <X size={18} />
+                    </button>
+                </div>
+
+                {/* Slack Content */}
+                <div className="p-6 space-y-6">
+                    <div className="flex gap-4">
+                        <div className="w-10 h-10 bg-emerald-500 rounded flex-shrink-0 flex items-center justify-center">
+                            <Activity className="text-navy-900" size={20} />
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="font-black text-white text-sm">ChaosCTRL</span>
+                                <span className="bg-gray-700 text-[10px] text-gray-300 px-1 rounded uppercase font-bold">APP</span>
+                                <span className="text-gray-500 text-xs">10:42 AM</span>
+                            </div>
+                            <p className="text-gray-300 text-sm mb-4">
+                                🚨 *Critical Scope Drift Detected* in Sprint 24. A new request just moved the projected delivery date by *12 days*.
+                            </p>
+
+                            {/* Slack Message Attachment */}
+                            <div className="border-l-4 border-red-500 bg-white/5 p-4 rounded-r-lg">
+                                <p className="text-white font-bold text-sm mb-2">Ticket #882: Migrate Auth to v3</p>
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <p className="text-gray-400 text-[10px] uppercase font-bold">Chaos Score</p>
+                                        <p className="text-red-500 font-black text-lg">92/100</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-400 text-[10px] uppercase font-bold">Impact</p>
+                                        <p className="text-white font-bold text-sm">+4 Days Dependency</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button className="bg-[#007a5a] hover:bg-[#148567] text-white text-xs font-bold px-3 py-1.5 rounded transition-all">Review in Dashboard</button>
+                                    <button className="bg-white/5 hover:bg-white/10 text-white text-xs font-bold px-3 py-1.5 rounded border border-white/10 transition-all">Acknowledge</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Slack Footer */}
+                <div className="px-6 py-4 bg-white/5 border-t border-white/5 flex justify-end">
+                    <button
+                        onClick={() => setIsSlackModalOpen(false)}
+                        className="bg-emerald-500 hover:bg-emerald-400 text-navy-900 px-6 py-2 rounded-lg font-bold text-sm transition-all"
+                    >
+                        Got it
+                    </button>
+                </div>
+            </m.div>
+        </div>
+    );
+
+    const renderModal = () => (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+            <m.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className={`${theme.cardBg} w-full max-w-lg rounded-3xl border ${theme.border} p-8 shadow-2xl overflow-hidden relative`}
+            >
+                <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-500/20 rounded-xl">
+                            <Zap className="text-blue-500" size={24} />
+                        </div>
+                        <h3 className={`text-2xl font-bold ${theme.text}`}>Delay Simulator</h3>
+                    </div>
+                    <button onClick={() => setIsModalOpen(false)} className={`${theme.textMuted} hover:text-white`}>
+                        <X size={24} />
+                    </button>
+                </div>
+
+                <div className="space-y-6 mb-10">
+                    <p className={`${theme.textMuted} text-sm`}>
+                        Simulate how this new request interacts with your existing backlog. Calculations are based on team velocity, dependency depth, and developer availability.
+                    </p>
+
+                    <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
+                        <div className="flex justify-between items-center">
+                            <span className={`text-sm ${theme.textMuted}`}>Current Release</span>
+                            <span className={`text-sm font-bold ${theme.text}`}>Sep 14, 2024</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className={`text-sm text-red-400 font-bold`}>New Projected Date</span>
+                            <span className={`text-sm font-bold text-red-500 animate-pulse`}>Sep 26, 2024</span>
+                        </div>
+                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-red-500 w-[65%] shadow-[0_0_10px_rgba(239,68,68,0.5)]"></div>
+                        </div>
+                        <div className="flex justify-center pt-2">
+                            <span className="text-xs font-black text-red-500 uppercase tracking-widest">+12 DAYS AT RISK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex gap-4">
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className={`flex-1 py-4 rounded-xl font-bold text-sm ${theme.text} hover:bg-white/5 border ${theme.border} transition-all`}
+                    >
+                        Close Simulator
+                    </button>
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="flex-1 bg-red-500 hover:bg-red-400 text-white py-4 rounded-xl font-bold text-sm transition-all shadow-lg"
+                    >
+                        Reject Change
+                    </button>
+                </div>
+            </m.div>
+        </div>
+    );
+
     const renderStakeholderModal = () => {
         if (!selectedStakeholder) return null;
 
         return (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-navy-900/90 backdrop-blur-sm" onClick={() => setSelectedStakeholder(null)}></div>
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -405,7 +576,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             )}
                         </div>
                     </div>
-                </motion.div>
+                </m.div>
             </div>
         );
     };
@@ -416,7 +587,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         return (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-navy-900/90 backdrop-blur-sm" onClick={() => setIsRoadmapModalOpen(false)}></div>
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -473,7 +644,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             Create Initiative
                         </button>
                     </div>
-                </motion.div>
+                </m.div>
             </div>
         );
     };
@@ -483,7 +654,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const renderDashboard = () => {
         // Derived state for High Risk Items based on changeRequests
         // Filters for active (non-archived and non-rejected) requests, sorts by score descending, takes top 5
-        const highRiskItems = [...changeRequests]
+        const highRiskItems = [...displayedRequests]
             .filter(req => !req.archived && req.status !== 'rejected')
             .sort((a, b) => riskSortDirection === 'desc' ? b.score - a.score : a.score - b.score)
             .slice(0, 5)
@@ -499,8 +670,36 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
         return (
             <div className="animate-in fade-in duration-500">
+
+                {/* Demo Mode Action Banner */}
+                {isDemoMode && (
+                    <div className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="flex items-center gap-3 text-emerald-500">
+                            <Activity size={24} />
+                            <div>
+                                <h3 className="font-bold text-sm">You're viewing Demo Data</h3>
+                                <p className="text-xs opacity-80">Connect your tools to calculate your real Chaos Score.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setActiveTab('settings')}
+                                className="bg-emerald-500 text-navy-900 px-4 py-2 rounded-lg font-bold text-sm hover:bg-emerald-400 transition-colors"
+                            >
+                                Connect Integrations
+                            </button>
+                            <button
+                                onClick={() => setIsDemoMode(false)}
+                                className="bg-transparent border border-emerald-500/50 text-emerald-500 hover:bg-emerald-500/10 px-4 py-2 rounded-lg font-bold text-sm transition-colors"
+                            >
+                                View Empty State
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 <MetricsGrid
-                    stats={stats}
+                    stats={displayedStats}
                     currentChaosScore={currentChaosScore}
                     predictedDelay={predictedDelay}
                     onSimulate={() => setIsModalOpen(true)}
@@ -508,7 +707,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 />
 
                 <ScopeVelocityChart
-                    data={timelineData}
+                    data={isDemoMode ? timelineData : []}
                     isDarkMode={isDarkMode}
                     theme={theme}
                 />
@@ -534,7 +733,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                 </button>
                                 <AnimatePresence>
                                     {isRiskMenuOpen && (
-                                        <motion.div
+                                        <m.div
                                             initial={{ opacity: 0, scale: 0.95, y: 5 }}
                                             animate={{ opacity: 1, scale: 1, y: 0 }}
                                             exit={{ opacity: 0, scale: 0.95, y: 5 }}
@@ -554,21 +753,50 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                                     <TrendingUp size={14} className="text-emerald-500" /> Lowest Risk First
                                                 </button>
                                             </div>
-                                        </motion.div>
+                                        </m.div>
                                     )}
                                 </AnimatePresence>
                             </div>
                         </div>
-                        <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                             {highRiskItems.map((item, i) => (
-                                <div key={i} className="flex items-center gap-4">
-                                    <div className="w-48"><p className={`text-sm font-medium ${theme.text} truncate`}>{item.name}</p></div>
-                                    <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden"><div className={`h-full ${item.color}`} style={{ width: `${item.score}%` }}></div></div>
-                                    <div className="w-24 text-right"><span className={`text-xs font-bold ${theme.textMuted}`}>{item.display} ({item.score}%)</span></div>
+                                <div key={i} className="group/row flex flex-col p-4 border border-white/5 rounded-xl hover:bg-white/5 transition-all">
+                                    <div className="flex items-center gap-4 mb-3">
+                                        <div className="flex-1 min-w-0">
+                                            <p className={`text-sm font-bold ${theme.text} truncate`}>{item.name}</p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded ${item.color} text-navy-900`}>{item.display}</span>
+                                                <span className={`text-[10px] font-bold ${theme.textMuted}`}>{item.score}% Risk Score</span>
+                                            </div>
+                                        </div>
+                                        <div className="w-32 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                                            <div className={`h-full ${item.color}`} style={{ width: `${item.score}%` }}></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons - Visible on hover or small screens */}
+                                    <div className="flex items-center gap-2 pt-2 border-t border-white/5 opacity-0 group-hover/row:opacity-100 transition-opacity">
+                                        <button className="flex-1 bg-white/5 hover:bg-emerald-500 hover:text-navy-900 text-emerald-500 text-[10px] font-bold py-1.5 rounded transition-all flex items-center justify-center gap-1">
+                                            <MessageSquare size={12} /> Ping Slack
+                                        </button>
+                                        <button className="flex-1 bg-white/5 hover:bg-red-500 hover:text-white text-red-500 text-[10px] font-bold py-1.5 rounded transition-all flex items-center justify-center gap-1">
+                                            <X size={12} /> Reject Jira
+                                        </button>
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="flex-1 bg-white/5 hover:bg-blue-500 hover:text-white text-blue-500 text-[10px] font-bold py-1.5 rounded transition-all flex items-center justify-center gap-1"
+                                        >
+                                            <Zap size={12} /> Simulate
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                             {highRiskItems.length === 0 && (
-                                <p className={`text-center py-8 ${theme.textMuted} text-sm`}>No high risk items detected.</p>
+                                <div className="flex flex-col items-center justify-center py-12 text-center opacity-50">
+                                    <CheckCircle size={32} className="mb-2 text-emerald-500" />
+                                    <p className={`text-sm font-bold ${theme.text}`}>No high risk items detected.</p>
+                                    <p className="text-xs text-gray-400">Your current scope is within acceptable bounds.</p>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -670,130 +898,62 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                     <div className="space-y-6">
                         {/* Core API */}
-                        <div>
-                            <div className="flex justify-between mb-2">
-                                <label className={`block text-sm font-bold ${theme.textMuted}`}>Core API Key (ChaosCTRL)</label>
-                                <span className="text-emerald-500 text-xs font-bold cursor-pointer hover:underline">Regenerate</span>
-                            </div>
-                            <div className="flex gap-2 relative">
-                                <input
-                                    type={visibleKeys['core'] ? "text" : "password"}
-                                    value={apiConfigs.core}
-                                    readOnly
-                                    className={`flex-1 ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.textMuted} font-mono`}
-                                />
-                                <button
-                                    onClick={() => toggleKeyVisibility('core')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-                                >
-                                    {visibleKeys['core'] ? <EyeOff size={16} /> : <Eye size={16} />}
-                                </button>
-                            </div>
+                    </div>
+
+                    {/* Jira */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <FileCode size={16} className="text-gray-400" />
+                            <label className={`block text-sm font-bold ${theme.textMuted}`}>Jira API Token</label>
                         </div>
-
-                        <div className="grid md:grid-cols-2 gap-6">
-                            {/* Email */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Mail size={16} className="text-gray-400" />
-                                    <label className={`block text-sm font-bold ${theme.textMuted}`}>Email Service (SMTP/API)</label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={visibleKeys['email'] ? "text" : "password"}
-                                        placeholder="Enter API Key or SMTP credentials..."
-                                        value={apiConfigs.email}
-                                        onChange={(e) => setApiConfigs({ ...apiConfigs, email: e.target.value })}
-                                        className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
-                                    />
-                                    <button
-                                        onClick={() => toggleKeyVisibility('email')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-                                    >
-                                        {visibleKeys['email'] ? <EyeOff size={16} /> : <Eye size={16} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Slack */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <MessageSquare size={16} className="text-gray-400" />
-                                    <label className={`block text-sm font-bold ${theme.textMuted}`}>Slack Webhook URL</label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={visibleKeys['slack'] ? "text" : "password"}
-                                        placeholder="https://hooks.slack.com/services/..."
-                                        value={apiConfigs.slack}
-                                        onChange={(e) => setApiConfigs({ ...apiConfigs, slack: e.target.value })}
-                                        className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
-                                    />
-                                    <button
-                                        onClick={() => toggleKeyVisibility('slack')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-                                    >
-                                        {visibleKeys['slack'] ? <EyeOff size={16} /> : <Eye size={16} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Jira */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <FileCode size={16} className="text-gray-400" />
-                                    <label className={`block text-sm font-bold ${theme.textMuted}`}>Jira API Token</label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={visibleKeys['jira'] ? "text" : "password"}
-                                        placeholder="Enter Jira Personal Access Token..."
-                                        value={apiConfigs.jira}
-                                        onChange={(e) => setApiConfigs({ ...apiConfigs, jira: e.target.value })}
-                                        className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
-                                    />
-                                    <button
-                                        onClick={() => toggleKeyVisibility('jira')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-                                    >
-                                        {visibleKeys['jira'] ? <EyeOff size={16} /> : <Eye size={16} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Trello */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Trello size={16} className="text-gray-400" />
-                                    <label className={`block text-sm font-bold ${theme.textMuted}`}>Trello API Key</label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={visibleKeys['trello'] ? "text" : "password"}
-                                        placeholder="Enter Trello Power-Up Key..."
-                                        value={apiConfigs.trello}
-                                        onChange={(e) => setApiConfigs({ ...apiConfigs, trello: e.target.value })}
-                                        className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
-                                    />
-                                    <button
-                                        onClick={() => toggleKeyVisibility('trello')}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
-                                    >
-                                        {visibleKeys['trello'] ? <EyeOff size={16} /> : <Eye size={16} />}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end pt-4">
+                        <div className="relative">
+                            <input
+                                type={visibleKeys['jira'] ? "text" : "password"}
+                                placeholder="Enter Jira Personal Access Token..."
+                                value={apiConfigs.jira}
+                                onChange={(e) => setApiConfigs({ ...apiConfigs, jira: e.target.value })}
+                                className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
+                            />
                             <button
-                                onClick={handleSaveProfile}
-                                className={`bg-white/5 text-${isDarkMode ? 'white' : 'slate-900'} hover:bg-white/10 px-6 py-2 rounded-lg font-bold text-sm border ${theme.border} transition-colors`}
+                                onClick={() => toggleKeyVisibility('jira')}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
                             >
-                                Update Configurations
+                                {visibleKeys['jira'] ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>
                     </div>
+
+                    {/* Trello */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Trello size={16} className="text-gray-400" />
+                            <label className={`block text-sm font-bold ${theme.textMuted}`}>Trello API Key</label>
+                        </div>
+                        <div className="relative">
+                            <input
+                                type={visibleKeys['trello'] ? "text" : "password"}
+                                placeholder="Enter Trello Power-Up Key..."
+                                value={apiConfigs.trello}
+                                onChange={(e) => setApiConfigs({ ...apiConfigs, trello: e.target.value })}
+                                className={`w-full ${theme.bg} border ${theme.border} rounded-lg p-3 pr-10 ${theme.text} outline-none focus:border-emerald-500 font-mono`}
+                            />
+                            <button
+                                onClick={() => toggleKeyVisibility('trello')}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                            >
+                                {visibleKeys['trello'] ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex justify-end pt-4">
+                    <button
+                        onClick={handleSaveProfile}
+                        className={`bg-white/5 text-${isDarkMode ? 'white' : 'slate-900'} hover:bg-white/10 px-6 py-2 rounded-lg font-bold text-sm border ${theme.border} transition-colors`}
+                    >
+                        Update Configurations
+                    </button>
                 </div>
             </div>
         </div>
@@ -856,7 +1016,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                                     gridColumnEnd: item.start + 1 + item.duration
                                                 }}
                                             >
-                                                <motion.div
+                                                <m.div
                                                     initial={{ width: 0 }}
                                                     animate={{ width: '100%' }}
                                                     className={`h-8 rounded-md flex items-center px-3 justify-between w-full shadow-lg border border-white/5 cursor-pointer hover:brightness-110 transition-all ${item.status === 'Done' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
@@ -867,7 +1027,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                                 >
                                                     <span className="font-bold text-xs truncate mr-2">{item.feature}</span>
                                                     <span className="text-[10px] uppercase font-bold opacity-75">{item.owner}</span>
-                                                </motion.div>
+                                                </m.div>
                                             </div>
                                         </div>
                                     ))}
@@ -881,7 +1041,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     };
 
     const renderScopeItems = () => {
-        const activeRequests = changeRequests.filter(req => !req.archived);
+        const activeRequests = displayedRequests.filter(req => !req.archived);
 
         return (
             <div className="animate-in fade-in duration-500">
@@ -965,7 +1125,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={7} className="p-8 text-center text-gray-500">No active scope changes found.</td>
+                                        <td colSpan={7} className="p-16 text-center">
+                                            <div className="flex flex-col items-center justify-center space-y-4">
+                                                <div className="bg-emerald-500/10 p-4 rounded-full text-emerald-500">
+                                                    <CheckCircle size={32} />
+                                                </div>
+                                                <h4 className={`text-lg font-bold ${theme.text}`}>No active requests</h4>
+                                                <p className={`${theme.textMuted} text-sm max-w-sm`}>You're all caught up! Connect an issue tracker in Settings to start monitoring your sprints automatically.</p>
+                                                <button onClick={() => setActiveTab('settings')} className="mt-4 bg-emerald-500 hover:bg-emerald-400 text-navy-900 font-bold py-2 px-6 rounded-lg transition-colors">
+                                                    Go to Integrations
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 )}
                             </tbody>
@@ -983,20 +1154,28 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <div className={`${theme.cardBg} ${theme.border} border rounded-2xl p-6 ${theme.shadow}`}>
                     <h3 className={`text-lg font-bold ${theme.text} mb-6`}>Sprint Velocity</h3>
                     <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={velocityData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} />
-                                <XAxis dataKey="sprint" axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
-                                <RechartsTooltip
-                                    cursor={{ fill: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
-                                    contentStyle={{ backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF', borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#E2E8F0', color: isDarkMode ? '#fff' : '#000' }}
-                                />
-                                <Legend />
-                                <Bar dataKey="committed" fill="#3B82F6" name="Committed Points" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="completed" fill="#10B981" name="Completed Points" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        {isDemoMode ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={velocityData}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} />
+                                    <XAxis dataKey="sprint" axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
+                                    <RechartsTooltip
+                                        cursor={{ fill: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+                                        contentStyle={{ backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF', borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#E2E8F0', color: isDarkMode ? '#fff' : '#000' }}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="committed" fill="#3B82F6" name="Committed Points" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="completed" fill="#10B981" name="Completed Points" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-center p-6 bg-navy-900/50 rounded-xl border border-dashed border-white/20">
+                                <Activity size={32} className="text-gray-500 mb-3" />
+                                <h4 className={`font-bold ${theme.text}`}>Not enough data</h4>
+                                <p className={`text-xs ${theme.textMuted} mt-2`}>Complete at least two sprints with ChaosCTRL active to generate velocity charts.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -1004,45 +1183,55 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <div className={`${theme.cardBg} ${theme.border} border rounded-2xl p-6 ${theme.shadow}`}>
                     <h3 className={`text-lg font-bold ${theme.text} mb-6`}>Cumulative Flow</h3>
                     <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={cumulativeFlowData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
-                                <RechartsTooltip
-                                    contentStyle={{ backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF', borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#E2E8F0', color: isDarkMode ? '#fff' : '#000' }}
-                                />
-                                <Legend />
-                                <Area type="monotone" dataKey="done" stackId="1" stroke="#10B981" fill="#10B981" fillOpacity={0.6} name="Done" />
-                                <Area type="monotone" dataKey="inProgress" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} name="In Progress" />
-                                <Area type="monotone" dataKey="todo" stackId="1" stroke="#6B7280" fill="#6B7280" fillOpacity={0.6} name="To Do" />
-                            </AreaChart>
-                        </ResponsiveContainer>
+                        {isDemoMode ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={cumulativeFlowData}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"} />
+                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: isDarkMode ? '#9CA3AF' : '#64748B' }} />
+                                    <RechartsTooltip
+                                        contentStyle={{ backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF', borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#E2E8F0', color: isDarkMode ? '#fff' : '#000' }}
+                                    />
+                                    <Legend />
+                                    <Area type="monotone" dataKey="done" stackId="1" stroke="#10B981" fill="#10B981" fillOpacity={0.6} name="Done" />
+                                    <Area type="monotone" dataKey="inProgress" stackId="1" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.6} name="In Progress" />
+                                    <Area type="monotone" dataKey="todo" stackId="1" stroke="#6B7280" fill="#6B7280" fillOpacity={0.6} name="To Do" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-center p-6 bg-navy-900/50 rounded-xl border border-dashed border-white/20">
+                                <Layers size={32} className="text-gray-500 mb-3" />
+                                <h4 className={`font-bold ${theme.text}`}>Waiting for Jira tickets</h4>
+                                <p className={`text-xs ${theme.textMuted} mt-2`}>Connect your issue tracker and map your workflow states to view cumulative flow.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
             {/* Insight Card */}
-            <div className={`bg-gradient-to-r from-navy-800 to-navy-900 border ${theme.border} rounded-2xl p-8 relative overflow-hidden`}>
-                <div className="absolute right-0 top-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="relative z-10 flex items-start gap-4">
-                    <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-500">
-                        <Activity size={24} />
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-bold text-white mb-2">Velocity Insight</h3>
-                        <p className="text-gray-400 max-w-2xl">
-                            Your team's velocity dipped by <strong>20% in Sprint 4</strong> directly correlating with the "High Chaos" spike in scope changes.
-                            Rejecting the 2 flagged high-risk requests in the current sprint is projected to restore velocity to <strong>50 points</strong>.
-                        </p>
+            {isDemoMode && (
+                <div className={`bg-gradient-to-r from-navy-800 to-navy-900 border ${theme.border} rounded-2xl p-8 relative overflow-hidden`}>
+                    <div className="absolute right-0 top-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div className="relative z-10 flex items-start gap-4">
+                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-500">
+                            <Activity size={24} />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-white mb-2">Velocity Insight</h3>
+                            <p className="text-gray-400 max-w-2xl">
+                                Your team's velocity dipped by <strong>20% in Sprint 4</strong> directly correlating with the "High Chaos" spike in scope changes.
+                                Rejecting the 2 flagged high-risk requests in the current sprint is projected to restore velocity to <strong>50 points</strong>.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 
     const renderArchive = () => {
-        const archivedRequests = changeRequests.filter(req => req.archived);
+        const archivedRequests = displayedRequests.filter(req => req.archived);
 
         return (
             <div className="animate-in fade-in duration-500">
@@ -1096,7 +1285,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={6} className="p-8 text-center text-gray-500">No archived items.</td>
+                                        <td colSpan={6} className="p-16 text-center text-gray-500">
+                                            <ArchiveIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                                            <p>No archived requests.</p>
+                                        </td>
                                     </tr>
                                 )}
                             </tbody>
@@ -1252,7 +1444,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                                 <AnimatePresence>
                                     {isTimeDropdownOpen && (
-                                        <motion.div
+                                        <m.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 10 }}
@@ -1270,10 +1462,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                                     {opt}
                                                 </button>
                                             ))}
-                                        </motion.div>
+                                        </m.div>
                                     )}
                                 </AnimatePresence>
                             </div>
+
+                            <button
+                                onClick={() => setIsSlackModalOpen(true)}
+                                className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-full border ${theme.border} ${theme.cardBg} hover:border-emerald-500 transition-colors group`}
+                            >
+                                <MessageSquare size={16} className="text-emerald-500 group-hover:scale-110 transition-transform" />
+                                <span className={`text-sm font-bold ${theme.text}`}>Weekly Digest</span>
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            </button>
 
                             <button className={`p-3 rounded-full border ${theme.border} ${theme.cardBg} ${theme.text} hover:border-emerald-500 transition-colors`}>
                                 <Bell size={20} />
@@ -1284,6 +1485,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
                 {renderContent()}
 
+                {isModalOpen && renderModal()}
+                {isSlackModalOpen && renderSlackModal()}
+                {isRoadmapModalOpen && renderAddRoadmapModal()}
             </main>
         </div>
     );

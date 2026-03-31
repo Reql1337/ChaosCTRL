@@ -1,5 +1,9 @@
 import React from 'react';
-import { Search, Book, Code, Terminal, FileText } from 'lucide-react';
+import Search from 'lucide-react/dist/esm/icons/search';
+import Book from 'lucide-react/dist/esm/icons/book';
+import Code from 'lucide-react/dist/esm/icons/code';
+import Terminal from 'lucide-react/dist/esm/icons/terminal';
+import FileText from 'lucide-react/dist/esm/icons/file-text';
 
 const DocumentationPage: React.FC = () => {
   return (

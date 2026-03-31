@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Menu, X, Gem } from 'lucide-react';
+import Menu from 'lucide-react/dist/esm/icons/menu';
+import X from 'lucide-react/dist/esm/icons/x';
+import Gem from 'lucide-react/dist/esm/icons/gem';
 
 interface NavbarProps {
   onSignIn: () => void;

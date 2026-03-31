@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 const testimonials = [
   {
@@ -32,7 +32,7 @@ const Testimonials: React.FC = () => {
 
        <div className="flex gap-6 px-4 overflow-x-auto pb-8 scrollbar-hide snap-x">
           {testimonials.map((t, i) => (
-             <motion.div 
+             <m.div 
                 key={i}
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -49,7 +49,7 @@ const Testimonials: React.FC = () => {
                    </div>
                    <p className="text-gray-300 leading-relaxed font-medium">"{t.text}"</p>
                 </div>
-             </motion.div>
+             </m.div>
           ))}
        </div>
     </section>

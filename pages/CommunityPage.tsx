@@ -1,5 +1,8 @@
 import React from 'react';
-import { MessageCircle, Users, Calendar, ArrowUpRight } from 'lucide-react';
+import MessageCircle from 'lucide-react/dist/esm/icons/message-circle';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Calendar from 'lucide-react/dist/esm/icons/calendar';
+import ArrowUpRight from 'lucide-react/dist/esm/icons/arrow-up-right';
 
 const CommunityPage: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gem } from 'lucide-react';
+import Gem from 'lucide-react/dist/esm/icons/gem';
 
 const AboutPage: React.FC = () => {
   return (

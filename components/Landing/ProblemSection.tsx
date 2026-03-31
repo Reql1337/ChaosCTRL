@@ -1,5 +1,7 @@
 import React from 'react';
-import { EyeOff, Users, Activity } from 'lucide-react';
+import EyeOff from 'lucide-react/dist/esm/icons/eye-off';
+import Users from 'lucide-react/dist/esm/icons/users';
+import Activity from 'lucide-react/dist/esm/icons/activity';
 
 const ProblemSection: React.FC = () => {
   return (
